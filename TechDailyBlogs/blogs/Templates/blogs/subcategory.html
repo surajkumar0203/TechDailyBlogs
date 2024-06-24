@@ -1,0 +1,118 @@
+{% extends 'blogs/base.html' %}
+{% load custom_filters %}
+{% block title %}{{title}}{% endblock %}
+
+
+{% block category %}
+
+    <div class="container">
+         <div class="owl-carousel">
+            {% for post in context.post_banners %}
+                <div class="card p-3 m-3" title="{{post.description}}">
+                    <div class="img-container " >
+                        <img src="/media/{{post.images}}" class="responsive-img" style="max-height:163px;" alt={{post.images}} >
+                    </div>
+                    
+                    <div class="card-content">
+                        <h5 class="card-title">
+                            {{post.title}}
+                        </h5>
+                        <p class="card-text">{{post.description | truncate_chars:30 }}</p>
+                        <a href="{% url 'blogdescription'  post.cat|lower post.title|lower %}" class="btn btn-dark">Read</a>
+                        
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% comment %} paginations top {% endcomment %}
+<div class="container navbar navbar-expand">
+    <nav class="navbar-nav ml-auto ">
+        <ul class="pagination">
+            <li class="page-item">
+                <a class="page-link border border-0 text-light bg-dark" href="?page=1">First</a>
+            </li>
+        {% if context.post_all_news.has_previous %}
+            <li class="page-item text-light bg-dark">
+                <a href="?page={{context.post_all_news.previous_page_number}}" class="page-link text-light bg-dark border border-0">Previous</a>
+            </li>
+        {% endif %}
+        {% for tpl in totalpagelist %}
+        {% if context.post_all_news.number == tpl %}
+      
+            <li class="page-item  text-light bg-dark" aria-current="page">
+                <a class="page-link text-dark bg-light border border-0" href="?page={{tpl}}">{{tpl}}</a>
+            </li>
+            {% else %}
+            <li class="page-item" aria-current="page">
+                <a class="page-link text-light bg-dark border border-0" href="?page={{tpl}}">{{tpl}}</a>
+            </li>
+            {% endif %}
+        {% endfor %}
+        {% if context.post_all_news.has_next %}
+            <li class="page-item">
+                <a class="page-link text-light bg-dark border border-0" href="?page={{context.post_all_news.next_page_number}}">Next</a>
+            </li>
+        {% endif %}
+        <li class="page-item">
+            <a class="page-link text-light bg-dark border border-0" href="?page={{lastpage}}">last</a>
+        </li>
+        </ul>
+    </nav>
+</div>
+{% comment %} card {% endcomment %}
+    {% for post in context.post_all_news %}
+        <div class="container mb-5">
+            <div class="card mb-5" style="max-width: 100%;">
+                <div class="row no-gutters">
+                    <div class="col-md-4">
+                        <img src="/media/{{post.images}}" alt={{post.images}}>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">{{post.title}}</h5>
+                            <p class="card-text">{{post.description | truncate_chars:200}}</p>
+                            <p class="card-text"><small class="text-muted">Last update : {{post.add_date}}</small></p>
+                            <a href="{% url 'blogdescription'  post.cat|lower post.title|lower %}" class="btn btn-dark">Read</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% comment %} paginations bottom {% endcomment %}
+    <div class="container navbar navbar-expand">
+        <nav class="navbar-nav ml-auto ">
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link border border-0 text-light bg-dark" href="?page=1">First</a>
+                </li>
+            {% if context.post_all_news.has_previous %}
+                <li class="page-item text-light bg-dark">
+                    <a href="?page={{context.post_all_news.previous_page_number}}" class="page-link text-light bg-dark border border-0">Previous</a>
+                </li>
+            {% endif %}
+            {% for tpl in totalpagelist %}
+            {% if context.post_all_news.number == tpl %}
+          
+                <li class="page-item  text-light bg-dark" aria-current="page">
+                    <a class="page-link text-dark bg-light border border-0" href="?page={{tpl}}">{{tpl}}</a>
+                </li>
+                {% else %}
+                <li class="page-item" aria-current="page">
+                    <a class="page-link text-light bg-dark border border-0" href="?page={{tpl}}">{{tpl}}</a>
+                </li>
+                {% endif %}
+            {% endfor %}
+            {% if context.post_all_news.has_next %}
+                <li class="page-item">
+                    <a class="page-link text-light bg-dark border border-0" href="?page={{context.post_all_news.next_page_number}}">Next</a>
+                </li>
+            {% endif %}
+            <li class="page-item">
+                <a class="page-link text-light bg-dark border border-0" href="?page={{lastpage}}">last</a>
+            </li>
+            </ul>
+        </nav>
+    </div>
+{% endblock %}
